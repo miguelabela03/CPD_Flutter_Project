@@ -66,8 +66,8 @@ class _GameListState extends State<GameList> {
           gameTitle: item.value["gameTitle"],
           genre: selectGenre,
           console: selectConsole,
-          sellingPrice: item.value["sellingPrice"]
-          //image: item.value["image"]
+          sellingPrice: item.value["sellingPrice"],
+          image: item.value["image"]
           ));
     }
 

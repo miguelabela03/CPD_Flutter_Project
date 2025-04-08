@@ -54,6 +54,11 @@ class _NewItemState extends State<NewItem> {
     });
   }
 
+  Future<String> convertImageToBase64(File imageFile) async {
+    final bytes = await imageFile.readAsBytes();
+    return base64Encode(bytes);
+  }
+
   var isSendingData = false;
 
   void _saveItem() async {
@@ -69,6 +74,11 @@ class _NewItemState extends State<NewItem> {
         'game-list.json',
       );
 
+      final base64Image =
+          _selectedImage != null
+              ? await convertImageToBase64(_selectedImage!)
+              : null;
+
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
@@ -77,7 +87,7 @@ class _NewItemState extends State<NewItem> {
           'genre': _selectedGenre!.title,
           'console': _selectedConsole!.title,
           'sellingPrice': _enteredSellingPrice,
-          // Implement Image
+          'image': base64Image, // sent as string
         }),
       );
 
@@ -94,7 +104,7 @@ class _NewItemState extends State<NewItem> {
           genre: _selectedGenre!,
           console: _selectedConsole!,
           sellingPrice: _enteredSellingPrice,
-          // Implement Image
+          image: base64Image,
         ),
       );
     }
@@ -187,7 +197,9 @@ class _NewItemState extends State<NewItem> {
                             _selectedConsole = value!;
                           });
                         },
-                        decoration: const InputDecoration(label: Text('Console')),
+                        decoration: const InputDecoration(
+                          label: Text('Console'),
+                        ),
                       ),
                     ),
                   ],
@@ -270,8 +282,8 @@ class _NewItemState extends State<NewItem> {
                     _selectedImage == null
                         ? const Text("No Image Selected")
                         : Container(
-                          width: 300, // Set the desired width
-                          height: 300, // Set the desired height
+                          width: 350, // Set the desired width
+                          height: 500, // Set the desired height
                           decoration: BoxDecoration(
                             border: Border.all(
                               color: Colors.grey,
@@ -286,7 +298,7 @@ class _NewItemState extends State<NewItem> {
                         ),
                   ],
                 ),
-        
+
                 const SizedBox(height: 25),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,

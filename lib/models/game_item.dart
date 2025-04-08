@@ -8,7 +8,7 @@ class GameItem {
     required this.genre,
     required this.console,
     required this.sellingPrice,
-    // required this.image
+    required this.image
   });
 
   final String id;
@@ -16,5 +16,5 @@ class GameItem {
   final Genre genre;
   final Console console;
   final double sellingPrice;
-  // final String image;
+  final String? image;
 }
