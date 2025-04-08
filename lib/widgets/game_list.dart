@@ -8,6 +8,7 @@ import 'package:play_again_ma_swd62a/data/consoles.dart';
 import 'package:play_again_ma_swd62a/data/genres.dart';
 
 import 'package:play_again_ma_swd62a/models/game_item.dart';
+import 'package:play_again_ma_swd62a/screens/game_details_screen.dart';
 import 'package:play_again_ma_swd62a/widgets/new_item.dart';
 
 import 'package:http/http.dart' as http;
@@ -31,8 +32,9 @@ class _GameListState extends State<GameList> {
 
   Future _loadItems() async {
     final url = Uri.https(
-        'play-again-ma-swd62a-default-rtdb.europe-west1.firebasedatabase.app',
-        'game-list.json');
+      'play-again-ma-swd62a-default-rtdb.europe-west1.firebasedatabase.app',
+      'game-list.json',
+    );
 
     final response = await http.get(url);
 
@@ -51,24 +53,31 @@ class _GameListState extends State<GameList> {
     final Map<String, dynamic> firebaseData = data as Map<String, dynamic>;
 
     for (final item in firebaseData.entries) {
-      final selectGenre = genres.entries
-          .firstWhere(
-              (genreItem) => genreItem.value.title == item.value["genre"])
-          .value;
+      final selectGenre =
+          genres.entries
+              .firstWhere(
+                (genreItem) => genreItem.value.title == item.value["genre"],
+              )
+              .value;
 
-      final selectConsole = consoles.entries
-          .firstWhere(
-              (consoleItem) => consoleItem.value.title == item.value["console"])
-          .value;
+      final selectConsole =
+          consoles.entries
+              .firstWhere(
+                (consoleItem) =>
+                    consoleItem.value.title == item.value["console"],
+              )
+              .value;
 
-      loadedList.add(GameItem(
+      loadedList.add(
+        GameItem(
           id: item.key,
           gameTitle: item.value["gameTitle"],
           genre: selectGenre,
           console: selectConsole,
           sellingPrice: item.value["sellingPrice"],
-          image: item.value["image"]
-          ));
+          image: item.value["image"],
+        ),
+      );
     }
 
     setState(() {
@@ -78,11 +87,9 @@ class _GameListState extends State<GameList> {
   }
 
   void _addItem() async {
-    final newItem = await Navigator.of(context).push<GameItem>(
-      MaterialPageRoute(
-        builder: (ctx) => const NewItem(),
-      ),
-    );
+    final newItem = await Navigator.of(
+      context,
+    ).push<GameItem>(MaterialPageRoute(builder: (ctx) => const NewItem()));
 
     if (newItem == null) {
       return;
@@ -95,8 +102,9 @@ class _GameListState extends State<GameList> {
 
   void removeItem(GameItem item) {
     final url = Uri.https(
-        'play-again-ma-swd62a-default-rtdb.europe-west1.firebasedatabase.app',
-        'game-list/${item.id}.json');
+      'play-again-ma-swd62a-default-rtdb.europe-west1.firebasedatabase.app',
+      'game-list/${item.id}.json',
+    );
 
     http.delete(url);
 
@@ -107,14 +115,10 @@ class _GameListState extends State<GameList> {
 
   @override
   Widget build(BuildContext context) {
-    Widget content = const Center(
-      child: Text('No Items in the list'),
-    );
+    Widget content = const Center(child: Text('No Items in the list'));
 
     if (isLoading) {
-      content = const Center(
-        child: CircularProgressIndicator(),
-      );
+      content = const Center(child: CircularProgressIndicator());
     }
 
     if (_gameItems.isNotEmpty) {
@@ -122,36 +126,41 @@ class _GameListState extends State<GameList> {
         onRefresh: _loadItems,
         child: ListView.builder(
           itemCount: _gameItems.length,
-          itemBuilder: (ctx, index) => Dismissible(
-            onDismissed: (direction) {
-              removeItem(_gameItems[index]);
-            },
-            key: ValueKey(_gameItems[index].id),
-            child: ListTile(
-              title: Text(_gameItems[index].gameTitle),
-              leading: Container(
-                width: 24,
-                height: 24,
-                color: _gameItems[index].genre.color,
+          itemBuilder:
+              (ctx, index) => Dismissible(
+                onDismissed: (direction) {
+                  removeItem(_gameItems[index]);
+                },
+                key: ValueKey(_gameItems[index].id),
+                child: ListTile(
+                  title: Text(_gameItems[index].gameTitle),
+                  leading: Container(
+                    width: 24,
+                    height: 24,
+                    color: _gameItems[index].genre.color,
+                  ),
+                  trailing: Text("€${_gameItems[index].sellingPrice}"),
+                  onTap: () {
+                    print("Item tapped");
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder:
+                            (ctx) =>
+                                GameDetailsScreen(gameItem: _gameItems[index]),
+                      ),
+                    );
+                  },
+                ),
               ),
-              trailing: Text(
-                "€${_gameItems[index].sellingPrice}",
-              ),
-            ),
-          ),
         ),
       );
     }
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Your Games'),
-          actions: [
-            IconButton(
-              onPressed: _addItem,
-              icon: const Icon(Icons.add),
-            ),
-          ],
-        ),
-        body: content);
+      appBar: AppBar(
+        title: const Text('Your Games'),
+        actions: [IconButton(onPressed: _addItem, icon: const Icon(Icons.add))],
+      ),
+      body: content,
+    );
   }
 }
