@@ -141,7 +141,6 @@ class _GameListState extends State<GameList> {
                   ),
                   trailing: Text("€${_gameItems[index].sellingPrice}"),
                   onTap: () {
-                    print("Item tapped");
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder:

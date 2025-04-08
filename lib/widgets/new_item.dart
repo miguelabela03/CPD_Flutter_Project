@@ -237,9 +237,7 @@ class _NewItemState extends State<NewItem> {
                             margin: const EdgeInsets.symmetric(horizontal: 5),
                             decoration: BoxDecoration(
                               color: Colors.black,
-                              borderRadius: BorderRadius.circular(
-                                8,
-                              ),
+                              borderRadius: BorderRadius.circular(8),
                             ),
                             child: MaterialButton(
                               onPressed: _pickImageFromGallery,
@@ -259,9 +257,7 @@ class _NewItemState extends State<NewItem> {
                             margin: const EdgeInsets.symmetric(horizontal: 5),
                             decoration: BoxDecoration(
                               color: Colors.black,
-                              borderRadius: BorderRadius.circular(
-                                8,
-                              ),
+                              borderRadius: BorderRadius.circular(8),
                             ),
                             child: MaterialButton(
                               onPressed: _pickImageFromCamera,
@@ -282,12 +278,10 @@ class _NewItemState extends State<NewItem> {
                     _selectedImage == null
                         ? const Text("No Image Selected")
                         : Container(
-                          width: 350, 
+                          width: 350,
                           height: 500,
                           decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey,
-                            ),
+                            border: Border.all(color: Colors.grey),
                           ),
                           child: Image.file(
                             _selectedImage!,
