@@ -113,7 +113,7 @@ class _NewItemState extends State<NewItem> {
       NotiService().showNotification(
         id: 0,
         title: "New Game Details",
-        body: "The game details have been added successfully.",
+        body: "Game details added successfully",
       );
     }
   }
