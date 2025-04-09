@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:play_again_ma_swd62a/services/noti_service.dart';
 import 'package:play_again_ma_swd62a/widgets/game_list.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // init notifications
+  NotiService().initNotification();
+
   runApp(const MainApp());
 }
 

@@ -14,6 +14,7 @@ import 'package:play_again_ma_swd62a/models/game_item.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:play_again_ma_swd62a/services/noti_service.dart';
 
 class NewItem extends StatefulWidget {
   const NewItem({super.key});
@@ -106,6 +107,13 @@ class _NewItemState extends State<NewItem> {
           sellingPrice: _enteredSellingPrice,
           image: base64Image,
         ),
+      );
+
+      // Sending notification
+      NotiService().showNotification(
+        id: 0,
+        title: "New Game Details",
+        body: "The game details have been added successfully.",
       );
     }
   }
